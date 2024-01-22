@@ -9,11 +9,6 @@ function initializeGame() {
     let touchEndX = 0;
     let touchStartTime = 0;
 
-    document.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartTime = Date.now();
-    });
-
     document.addEventListener('touchend', (e) => {
         touchEndX = e.changedTouches[0].clientX;
         const touchDuration = Date.now() - touchStartTime;
@@ -295,8 +290,22 @@ function initializeGame() {
     let dropInterval = 1000;
     let lastTime = 0;
 
+    let highScore = parseInt(localStorage.getItem('highScore')) || 0;
+    document.getElementById('highScore').innerText = highScore;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+    });
+
     function updateScore() {
-        document.getElementById('score').innerText = player.score;
+        document.getElementById('currentScore').innerText = player.score;
+
+        if (player.score > highScore) {
+            highScore = player.score;
+            document.getElementById('highScore').innerText = highScore;
+            localStorage.setItem('highScore', highScore.toString());
+        }
     }
 
     function rotate(matrix, dir) {
