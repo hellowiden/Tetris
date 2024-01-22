@@ -5,6 +5,37 @@ function initializeGame() {
     let gameStarted = false;
     let gamePaused = false;
 
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartTime = 0;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+    });
+
+    document.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].clientX;
+        const touchDuration = Date.now() - touchStartTime;
+
+        if (touchDuration < 200) {
+            playerRotate(1);
+        } else {
+            handleSwipe();
+        }
+    });
+
+    function handleSwipe() {
+        const swipeDistance = touchEndX - touchStartX;
+        const swipeThreshold = 30;
+
+        if (swipeDistance > swipeThreshold) {
+            playerMove(1);
+        } else if (swipeDistance < -swipeThreshold) {
+            playerMove(-1);
+        }
+    }
+
     function pauseGame() {
         if (gamePaused) {
             gamePaused = false;
@@ -31,26 +62,25 @@ function initializeGame() {
     function arenaSweep() {
         let rowCount = 0;
         let lineClearPoints = 0;
-    
+
         for (let y = arena.length - 1; y >= 0; --y) {
             if (arena[y].every(cell => cell !== 0)) {
                 const removedRow = arena.splice(y, 1)[0].fill(0);
                 arena.unshift(removedRow);
                 rowCount++;
-                y++; 
-    
+                y++;
+
                 if (rowCount == 1) {
                     lineClearPoints = 500;
                 } else if (rowCount == 2) {
-                    lineClearPoints = 1000; 
+                    lineClearPoints = 1000;
                 }
             }
         }
-    
+
         player.score += lineClearPoints;
     }
-    
-    
+
     function collide(arena, player) {
         const m = player.matrix;
         const o = player.pos;
@@ -100,7 +130,7 @@ function initializeGame() {
                 [0, 6, 6],
                 [6, 6, 0],
                 [0, 0, 0],
-            ];        
+            ];
         } else if (type === 'T') {
             return [
                 [0, 7, 0],
@@ -109,7 +139,7 @@ function initializeGame() {
             ];
         }
     }
-    
+
     document.getElementById('startButton').addEventListener('click', () => {
         if (gameStarted) {
             arena.forEach(row => row.fill(0));
@@ -121,7 +151,7 @@ function initializeGame() {
             startGame();
         }
     });
-    
+
     document.addEventListener('keydown', event => {
         if (gameStarted) {
             switch (event.key) {
@@ -165,19 +195,16 @@ function initializeGame() {
         matrix.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0) {
-                    // Draw the main cell color
                     context.fillStyle = colors[value];
                     context.fillRect(x + offset.x, y + offset.y, 1, 1);
-    
-                    // Draw a slightly darker shade for every second cell
+
                     if ((x + y) % 2 === 0) {
                         context.fillStyle = shadeColor(colors[value], -10);
                         context.fillRect(x + offset.x, y + offset.y, 1, 1);
                     }
-    
-                    // Draw border around each cell
-                    context.strokeStyle = '#333'; 
-                    context.lineWidth = 0.05; 
+
+                    context.strokeStyle = '#333';
+                    context.lineWidth = 0.05;
                     context.strokeRect(x + offset.x, y + offset.y, 1, 1);
                 }
             });
@@ -185,25 +212,24 @@ function initializeGame() {
     }
 
     function shadeColor(color, percent) {
-        var R = parseInt(color.substring(1,3),16);
-        var G = parseInt(color.substring(3,5),16);
-        var B = parseInt(color.substring(5,7),16);
-    
-        R = parseInt(R * (100 + percent) / 100);
-        G = parseInt(G * (100 + percent) / 100);
-        B = parseInt(B * (100 + percent) / 100);
-    
-        R = (R<255)?R:255;  
-        G = (G<255)?G:255;  
-        B = (B<255)?B:255;  
-    
-        var RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
-        var GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
-        var BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
-    
-        return "#"+RR+GG+BB;
+        var R = parseInt(color.substring(1, 3), 16);
+        var G = parseInt(color.substring(3, 5), 16);
+        var B = parseInt(color.substring(5, 7), 16);
+
+        R = parseInt((R * (100 + percent)) / 100);
+        G = parseInt((G * (100 + percent)) / 100);
+        B = parseInt((B * (100 + percent)) / 100);
+
+        R = R < 255 ? R : 255;
+        G = G < 255 ? G : 255;
+        B = B < 255 ? B : 255;
+
+        var RR = (R.toString(16).length == 1) ? "0" + R.toString(16) : R.toString(16);
+        var GG = (G.toString(16).length == 1) ? "0" + G.toString(16) : G.toString(16);
+        var BB = (B.toString(16).length == 1) ? "0" + B.toString(16) : B.toString(16);
+
+        return "#" + RR + GG + BB;
     }
-    
 
     function merge(arena, player) {
         player.matrix.forEach((row, y) => {
@@ -239,7 +265,7 @@ function initializeGame() {
         player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
         player.pos.y = 0;
         player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
-    
+
         if (collide(arena, player)) {
             arena.forEach(row => row.fill(0));
             player.score = 0;
@@ -269,8 +295,6 @@ function initializeGame() {
     let dropInterval = 1000;
     let lastTime = 0;
 
-
-
     function updateScore() {
         document.getElementById('score').innerText = player.score;
     }
@@ -287,18 +311,18 @@ function initializeGame() {
             matrix.reverse();
         }
     }
-    
+
     const colors = [
-        null,        // No color (for empty cells)
-        '#FF0D72',   // T Tetrimino
-        '#0DC2FF',   // E Tetrimino
-        '#0DFF72',   // T Tetrimino
-        '#F538FF',   // R Tetrimino
-        '#FF8E0D',   // I Tetrimino
-        '#FFE138',   // S Tetrimino
-        '#3877FF'    // J Tetrimino
+        null,
+        '#FF0D72',
+        '#0DC2FF',
+        '#0DFF72',
+        '#F538FF',
+        '#FF8E0D',
+        '#FFE138',
+        '#3877FF'
     ];
-    
+
     const arena = createMatrix(12, 20);
 
     const player = {
@@ -308,7 +332,7 @@ function initializeGame() {
     };
 
     document.getElementById('pauseButton').addEventListener('click', pauseGame);
-    
+
     function startGame() {
         playerReset();
         updateScore();
