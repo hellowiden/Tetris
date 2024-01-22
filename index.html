@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        
+        <header>
+            <h1>
+                <span style="color: rgb(253, 63, 89);">T</span>
+                <span style="color: rgb(255, 200, 46);">E</span>
+                <span style="color: rgb(254, 251, 52);">T</span>
+                <span style="color: rgb(83, 218, 63);">R</span>
+                <span style="color: rgb(1, 237, 250);">I</span>
+                <span style="color: rgb(221, 10, 178);">S</span>
+            </h1>
+        </header>
+
+        <section class="game-area">
+            <canvas id="tetris" width="240" height="400"></canvas>
+            <p id="score">0</p>
+        </section>
+
+        <section class="game-controls">
+            <button id="startButton">Start Game</button>
+            <button id="pauseButton">Pause</button>
+        </section>
+
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
