@@ -63,12 +63,18 @@ function initializeGame() {
     }
 
     function drawNextTetrominoes() {
-        clearNextTetrominoCanvases();
+    clearNextTetrominoCanvases();
 
-        if (tetrominoQueue[0]) drawMatrix(tetrominoQueue[0], { x: 1, y: 1 }, nextContext1);
-        if (tetrominoQueue[1]) drawMatrix(tetrominoQueue[1], { x: 1, y: 1 }, nextContext2);
-        if (tetrominoQueue[2]) drawMatrix(tetrominoQueue[2], { x: 1, y: 1 }, nextContext3);
+    const nextCanvases = [nextCanvas1, nextCanvas2, nextCanvas3];
+    const nextContexts = [nextContext1, nextContext2, nextContext3];
+
+    tetrominoQueue.slice(0, 3).forEach((tetromino, index) => {
+        if (tetromino) {
+            drawMatrix(tetromino, { x: 1, y: 1 }, nextContexts[index]);
+        }
+    });
     }
+
 
     function playerReset() {
         if (tetrominoQueue.length === 0) fillQueue();
@@ -181,13 +187,18 @@ function initializeGame() {
         requestAnimationFrame(update);
     }
 
-    function draw() {
-        clearCanvas();
-        drawMatrix(arena, { x: 0, y: 0 }, context);
-        drawGhost();
-        drawMatrix(player.matrix, player.pos, context);
-        drawNextTetrominoes();
-    }
+function draw() {
+    clearCanvas();
+    
+    // Draw arena, ghost, player, and next tetrominoes in one pass
+    drawMatrix(arena, { x: 0, y: 0 }, context);
+    drawGhost();
+    drawMatrix(player.matrix, player.pos, context);
+    if (tetrominoQueue[0]) drawMatrix(tetrominoQueue[0], { x: 1, y: 1 }, nextContext1);
+    if (tetrominoQueue[1]) drawMatrix(tetrominoQueue[1], { x: 1, y: 1 }, nextContext2);
+    if (tetrominoQueue[2]) drawMatrix(tetrominoQueue[2], { x: 1, y: 1 }, nextContext3);
+}
+
 
     function drawMatrix(matrix, offset, ctx = context) {
         matrix.forEach((row, y) => {
