@@ -56,10 +56,14 @@ function initializeGame() {
         }
     }
 
-    function drawNextTetrominoes() {
+    function clearNextTetrominoCanvases() {
         nextContext1.clearRect(0, 0, nextCanvas1.width, nextCanvas1.height);
         nextContext2.clearRect(0, 0, nextCanvas2.width, nextCanvas2.height);
         nextContext3.clearRect(0, 0, nextCanvas3.width, nextCanvas3.height);
+    }
+
+    function drawNextTetrominoes() {
+        clearNextTetrominoCanvases();
 
         if (tetrominoQueue[0]) drawMatrix(tetrominoQueue[0], { x: 1, y: 1 }, nextContext1);
         if (tetrominoQueue[1]) drawMatrix(tetrominoQueue[1], { x: 1, y: 1 }, nextContext2);
