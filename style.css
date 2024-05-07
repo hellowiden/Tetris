@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;800&display=swap");
 
 :root {
-    --main-font: Orbitron, sans-serif;
+    --main-font: 'Orbitron', sans-serif;
     --main-bg-color: #111;
     --container-bg-color: rgba(33, 33, 33, 0.763);
     --container-border-color: #ffffff;
@@ -26,10 +26,11 @@ body {
     font-family: var(--main-font);
     background-image: url('assets/03.jpg');
     background-color: var(--container-bg-color);
-    background-size: cover; 
+    background-size: cover;
     background-repeat: no-repeat;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 20px;
     align-items: center;
     justify-content: center;
     height: 100vh;
@@ -62,7 +63,7 @@ canvas {
     width: 100%;
     border: 2px solid var(--canvas-border-color);
     background-color: var(--canvas-bg-color);
-    box-shadow: 0 0 10px var(--canvas-shadow-color)
+    box-shadow: 0 0 10px var(--canvas-shadow-color);
 }
 
 .score-board {
@@ -73,25 +74,15 @@ canvas {
     color: var(--text-color);
 }
 
-#score {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-color);
-    font-size: 1rem;
-    font-family: var(--main-font);
-    font-weight: 400;
-}
-
 .game-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap:20px;
+    gap: 20px;
     width: 100%;
 }
 
-#startButton, #pauseButton {
+#startButton,
+#pauseButton {
     color: var(--button-text-color);
     font-family: var(--main-font);
     font-size: 1rem;
@@ -109,6 +100,16 @@ canvas {
     -webkit-backdrop-filter: var(--container-blur);
 }
 
-#startButton:hover, #pauseButton:hover {
+#startButton:hover,
+#pauseButton:hover {
     background-color: var(--button-hover-bg-color);
+}
+
+.next-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-color);
 }
